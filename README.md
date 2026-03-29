@@ -1,4 +1,24 @@
-📜 ScriptoriumDomain-adaptive RAG research intelligence system > Transforms static PDFs into dynamic, queryable knowledge systems.💡 What is Scriptorium?Most RAG systems treat all documents the same. Scriptorium doesn't.It detects the domain of your document and dynamically adapts its extraction logic, prompt templates, and output structure to match.🧪 Chemistry paper? It extracts yields, reactions, and catalysts.📈 Financial report? It pulls revenue, margins, and ratios.⚖️ Legal document? It highlights case citations, rulings, and arguments.🎥 Demo video: Watch the 3-min walkthrough here (← update this link)✨ Key FeaturesFeatureDescription🧠 Domain DetectionAutomatic classification into Chemistry / Finance / Law / Policy.👁️ Smart OCRFalls back to Tesseract OCR on scanned pages; uses native text on digital PDFs.🧩 Semantic ChunkingBoundary-aware chunking that respects equations, clauses, and paragraphs.🎯 MMR RetrievalMaximal Marginal Relevance reranking ensures context is both relevant and diverse.🖱️ Highlight-to-QuerySelect any text in the viewer to instantly "Ask about this selection."📊 Multi-doc CompareCross-document comparison on any user-defined aspect or metric.⚡ Auto InsightsGenerates a one-click executive summary and extracts key findings.🏗️ Structured ExtractionTables, metrics, and variables are pulled and exported as typed JSON.📌 Citation EngineEvery generated answer cites specific chunks, complete with page numbers.⚙️ How it WorksCode snippetgraph TD
+📜 Scriptorium
+Domain-adaptive RAG research intelligence system > Transforms static PDFs into dynamic, queryable knowledge systems.
+💡 What is Scriptorium?
+Most RAG systems treat all documents the same. Scriptorium doesn't.
+It detects the domain of your document and dynamically adapts its extraction logic, prompt templates, and output structure to match.
+🧪 Chemistry paper? It extracts yields, reactions, and catalysts.
+📈 Financial report? It pulls revenue, margins, and ratios.
+⚖️ Legal document? It highlights case citations, rulings, and arguments.
+🎥 Demo video: Watch the 3-min walkthrough here (← update this link)
+✨ Key Features
+Feature                                     Description
+🧠 Domain Detection                        Automatic classification into Chemistry / Finance / Law / Policy.
+👁️ Smart OCR                               Falls back to Tesseract OCR on scanned pages; uses native text on digital PDFs.
+🧩 Semantic Chunking                       Boundary-aware chunking that respects equations, clauses, and paragraphs.
+🎯 MMR Retrieval                           Maximal Marginal Relevance reranking ensures context is both relevant and diverse.
+🖱️ Highlight-to-Query                       Select any text in the viewer to instantly "Ask about this selection."
+📊 Multi-doc Compare                       Cross-document comparison on any user-defined aspect or metric.
+⚡ Auto Insights                           Generates a one-click executive summary and extracts key findings.
+🏗️ Structured Extraction                   Tables, metrics, and variables are pulled and exported as typed JSON.
+📌 Citation Engine                         Every generated answer cites specific chunks, complete with page numbers.
+⚙️ How it Works                            Code snippetgraph TD
     A[PDF Upload] --> B(PyMuPDF: Native Text)
     A --> C(Tesseract: Scanned OCR)
     

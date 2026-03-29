@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ─────────────────────────────────────────────────── */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-parchment text-ink;
+    background-image: 
+      radial-gradient(ellipse at 20% 10%, rgba(31, 58, 95, 0.03) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(212, 175, 55, 0.04) 0%, transparent 60%);
+    background-attachment: fixed;
+  }
+
+  * {
+    @apply border-border-subtle;
+  }
+
+  ::selection {
+    background: rgba(212, 175, 55, 0.25);
+    color: #1C1C1C;
+  }
+}
+
+/* ── Scrollbars ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ── Sidebar scrollbar (dark) ─────────────────────────────── */
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ── Shimmer skeleton ─────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 25%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+/* ── Prose / Markdown output ──────────────────────────────── */
+.prose-scriptorium {
+  @apply text-ink leading-relaxed;
+  font-size: 0.9rem;
+}
+.prose-scriptorium p { @apply mb-3; }
+.prose-scriptorium ul { @apply list-disc pl-5 mb-3 space-y-1; }
+.prose-scriptorium ol { @apply list-decimal pl-5 mb-3 space-y-1; }
+.prose-scriptorium h1, .prose-scriptorium h2 { @apply font-display font-medium text-navy mb-2 mt-4; }
+.prose-scriptorium h3 { @apply font-medium text-ink mb-1 mt-3; }
+.prose-scriptorium strong { @apply font-semibold text-ink; }
+.prose-scriptorium em { @apply italic text-muted; }
+.prose-scriptorium code { 
+  @apply font-mono text-xs bg-gray-100 px-1 py-0.5 rounded text-slate; 
+}
+.prose-scriptorium pre { 
+  @apply font-mono text-xs bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-3; 
+}
+.prose-scriptorium blockquote { 
+  @apply border-l-2 border-gold pl-3 italic text-muted my-3; 
+}
+.prose-scriptorium table {
+  @apply w-full border-collapse text-sm mb-3;
+}
+.prose-scriptorium th {
+  @apply bg-navy text-white px-3 py-2 text-left font-medium text-xs uppercase tracking-wide;
+}
+.prose-scriptorium td {
+  @apply border border-border-subtle px-3 py-2;
+}
+.prose-scriptorium tr:nth-child(even) td {
+  @apply bg-gray-50;
+}
+
+/* ── Highlight text selection context menu ────────────────── */
+.selectable-text {
+  user-select: text;
+  cursor: text;
+}
+
+/* ── Processing stage indicator ───────────────────────────── */
+.stage-indicator {
+  position: relative;
+}
+.stage-indicator::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ── Domain badge colors ──────────────────────────────────── */
+.domain-chemistry { @apply bg-emerald-50 text-emerald-700 border border-emerald-200; }
+.domain-finance   { @apply bg-blue-50 text-blue-700 border border-blue-200; }
+.domain-law       { @apply bg-amber-50 text-amber-700 border border-amber-200; }
+.domain-policy    { @apply bg-purple-50 text-purple-700 border border-purple-200; }
+.domain-general   { @apply bg-gray-100 text-gray-600 border border-gray-200; }

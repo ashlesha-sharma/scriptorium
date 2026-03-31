@@ -1,155 +1,135 @@
-#  Scriptorium
+# Scriptorium
 
-> **Domain-adaptive RAG research intelligence system** > *Transforms static PDFs into dynamic, queryable knowledge systems.*
+> Domain-adaptive RAG research intelligence system  
+> Transforms static PDFs into dynamic, queryable knowledge systems
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?style=flat-square)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square)
+![ChromaDB](https://img.shields.io/badge/Vector_DB-ChromaDB-orange?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
----
-
-##  What is Scriptorium?
-
-Most RAG systems treat all documents the same. **Scriptorium doesn't.**
-
-It detects the domain of your document and dynamically adapts its extraction logic, prompt templates, and output structure to match. 
-*  **Chemistry paper?** It extracts yields, reactions, and catalysts. 
-*  **Financial report?** It pulls revenue, margins, and ratios. 
-*  **Legal document?** It highlights case citations, rulings, and arguments.
-
-** Demo video:** [Watch the 3-min walkthrough here](#) *(← update this link)*
+**Live Demo:** https://your-vercel-url.vercel.app  
+**Demo Video:** https://youtube.com/watch?v=YOUR_VIDEO_ID
 
 ---
 
-##  Key Features
+## What is Scriptorium?
 
-| Feature | Description |
-|---------|-------------|
-|  **Domain Detection** | Automatic classification into Chemistry / Finance / Law / Policy. |
-|  **Smart OCR** | Falls back to Tesseract OCR on scanned pages; uses native text on digital PDFs. |
-|  **Semantic Chunking** | Boundary-aware chunking that respects equations, clauses, and paragraphs. |
-|  **MMR Retrieval** | Maximal Marginal Relevance reranking ensures context is both relevant *and* diverse. |
-|  **Highlight-to-Query** | Select any text in the viewer to instantly "Ask about this selection." |
-|  **Multi-doc Compare** | Cross-document comparison on any user-defined aspect or metric. |
-|  **Auto Insights** | Generates a one-click executive summary and extracts key findings. |
-|  **Structured Extraction** | Tables, metrics, and variables are pulled and exported as typed JSON. |
-|  **Citation Engine** | Every generated answer cites specific chunks, complete with page numbers. |
+Most RAG systems treat every document the same. A chemistry paper and a
+financial report get identical processing. Scriptorium does not work that way.
+
+It automatically detects the domain of your document and routes it to a
+specialized extraction pipeline:
+
+| Domain    | Auto-extracts                                    |
+|-----------|--------------------------------------------------|
+| Chemistry | Yields, reaction conditions, catalysts, NMR data |
+| Finance   | Revenue, EBITDA, margins, multiples, cash flow   |
+| Law       | Case citations, rulings, arguments, clauses      |
+| Policy    | Mandates, stakeholders, timelines, budgets       |
+| General   | Core thesis, evidence, methodology, conclusions  |
 
 ---
 
-##  How it Works
+## Features
 
-```mermaid
-graph TD
-    A[PDF Upload] --> B(PyMuPDF: Native Text)
-    A --> C(Tesseract: Scanned OCR)
-    
-    B --> D{Domain Detector}
-    C --> D
-    
-    D -->|Chemistry| E[Yields, Reactions, Conditions]
-    D -->|Finance| F[Revenue, Margins, Multiples]
-    D -->|Law| G[Citations, Rulings, Clauses]
-    D -->|Policy| H[Mandates, Stakeholders, Timelines]
-    
-    E --> I[Smart Semantic Chunker]
-    F --> I
-    G --> I
-    H --> I
-    
-    I --> J[Embedding Engine<br>all-MiniLM-L6-v2]
-    J --> K[(ChromaDB<br>Vector Store)]
-    
-    K --> L[MMR Retrieval +<br>Domain-Adaptive Prompting]
-    L --> M((HuggingFace LLM<br>Mistral-7B-Instruct))
-    
-    M --> N[Structured Response<br>Answer + Citations + Insights]
+- **Domain Detection** — automatic classification on upload, zero config
+- **OCR Pipeline** — Tesseract OCR on scanned pages, native text on digital PDFs
+- **Smart Chunking** — structural boundary-aware, respects equations and clauses
+- **MMR Retrieval** — diversity-aware reranking, not just top-k cosine similarity
+- **Highlight-to-Query** — select any text in viewer, click "Ask about selection"
+- **Multi-doc Compare** — cross-document comparison on any aspect you specify
+- **Auto Insights** — one-click executive summary and ranked key findings
+- **Citation Engine** — every answer cites specific chunks with page numbers
+- **Explain Level** — ELI5 / Intermediate / Expert mode
 
-Tech Stack
-Backend: Python 3.10, FastAPI, PyMuPDF, Tesseract, sentence-transformers
+---
 
-Frontend: Next.js 14, TailwindCSS, Framer Motion, Zustand
+## Architecture
+```
+PDF Upload
+   |
+   +-- PyMuPDF (native text) + Tesseract OCR (scanned pages)
+   v
+Domain Detector (keyword + pattern classifier, <5ms, no ML model)
+   v
+Smart Chunker (512 word chunks, 64 word overlap, boundary-aware)
+   v
+Embedding Engine (sentence-transformers/all-MiniLM-L6-v2, 384-dim)
+   v
+ChromaDB Vector Store (persistent, cosine similarity)
+   v
+MMR Retrieval top-6 (lambda=0.6, balances relevance + diversity)
+   v
+Domain-Adaptive Prompting (Base + Domain + Mode + ExplainLevel)
+   v
+HuggingFace LLM Mistral-7B-Instruct (free tier)
+   v
+Response: answer + citations + structured insights + follow-ups
+```
 
-AI Models: HuggingFace Inference API (free tier), all-MiniLM-L6-v2 (embeddings)
+---
 
-Vector Database: ChromaDB (local, persistent)
+## Tech Stack
 
-Getting Started
-Prerequisites
-Python ≥ 3.10
+**Backend:** Python 3.11, FastAPI, PyMuPDF, Tesseract, sentence-transformers, ChromaDB  
+**Frontend:** Next.js 14, React 18, TailwindCSS, Framer Motion, Zustand  
+**AI:** HuggingFace Inference API (free), Mistral-7B-Instruct-v0.3  
+**Vector DB:** ChromaDB with HNSW cosine index
 
-Node.js ≥ 18
+---
 
-Tesseract OCR installed on your machine
+## Project Structure
+```
+scriptorium/
+  backend/
+    pipeline/
+      ingestion.py        # PDF parsing + OCR
+      domain_detection.py # Domain classifier
+      chunking.py         # Smart chunker
+      vector_store.py     # ChromaDB + embeddings + MMR
+      rag.py              # Full RAG orchestrator
+    prompts/templates.py  # Domain-adaptive prompts
+    routers/              # API endpoints
+  frontend/
+    components/
+      Layout/             # Sidebar + TopBar
+      Document/           # PDF viewer + highlight-to-query
+      Chat/               # Messages + input + citations
+      Intelligence/       # Auto-insight panel
+    lib/store.js          # Zustand state management
+    lib/api.js            # Typed API client
+```
 
-A free HuggingFace account and API key
+---
 
-1. Clone the repository
-Bash
-git clone git@github.com:YOUR_USERNAME/scriptorium.git
-cd scriptorium
-2. Start the Backend
-Bash
+## Local Setup
+
+**Prerequisites:** Python 3.11, Node.js 18+, Tesseract OCR, HuggingFace API key
+
+**Backend:**
+```bash
 cd backend
-python -m venv venv
-
-# Activate virtual environment
-source venv/bin/activate       # On Mac/Linux
-venv\Scripts\activate          # On Windows
-
-# Install dependencies
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-
-# Setup environment variables
 cp .env.example .env
-# IMPORTANT: Edit .env and add your HF_API_KEY
-
-# Run the server
+# open .env and paste your HF_API_KEY
 python main.py
-3. Start the Frontend
-Open a new terminal window:
+```
 
-Bash
+**Frontend:**
+```bash
 cd frontend
 npm install
-
-# Setup environment variables
-echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
-
-# Run the client
+echo 'NEXT_PUBLIC_API_URL=http://localhost:8000' > .env.local
 npm run dev
-Navigate to http://localhost:3000 in your browser.
+```
 
-Project Structure
-Plaintext
-scriptorium/
-├── backend/
-│   ├── pipeline/
-│   │   ├── ingestion.py        # PDF parsing + OCR
-│   │   ├── domain_detection.py # Domain classifier
-│   │   ├── chunking.py         # Smart semantic chunker
-│   │   ├── vector_store.py     # ChromaDB + embeddings
-│   │   └── rag.py              # Full RAG orchestrator
-│   ├── prompts/
-│   │   └── templates.py        # Domain-adaptive prompt system
-│   ├── routers/
-│   │   ├── documents.py        # Upload, status, insights
-│   │   └── chat.py             # Query, compare
-│   └── models/
-│       └── schemas.py          # All typed API schemas
-│
-└── frontend/
-    ├── components/
-    │   ├── Layout/             # Sidebar, TopBar
-    │   ├── Document/           # PDF Viewer + highlight
-    │   ├── Chat/               # Messages, Input, Panel
-    │   └── Intelligence/       # Insight Panel
-    └── lib/
-        ├── store.js            # Zustand state management
-        └── api.js              # API client
-Contributing
-Contributions are welcome! If you'd like to add a new domain classifier or improve the chunking logic, please fork the repository and submit a pull request. For major changes, open an issue first to discuss what you would like to change.
+Open http://localhost:3000
 
-License
-Released under the MIT License — use freely, attribution appreciated.
+---
+
+## License
+
+MIT — built as a production MVP demonstrating system design and RAG engineering.

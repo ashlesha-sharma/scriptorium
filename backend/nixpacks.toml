@@ -1,0 +1,56 @@
+[phases.setup]
+nixPkgs = ["tesseract", "poppler_utils", "libgl1", "libglib2.0"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[start]
+cmd = "uvicorn main:app --host 0.0.0.0 --port $PORT"
+```
+
+---
+
+Also, some packages in `requirements.txt` cause build failures on Railway. Replace the entire `backend/requirements.txt` with this leaner version that removes problematic dependencies:
+```
+fastapi==0.111.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.9
+pydantic==2.7.1
+pydantic-settings==2.3.0
+
+# PDF & OCR
+pymupdf==1.24.5
+pytesseract==0.3.10
+Pillow==10.3.0
+pdf2image==1.17.0
+
+# Embeddings
+sentence-transformers==3.0.0
+
+# Vector DB
+chromadb==0.5.3
+
+# LLM
+huggingface-hub==0.23.3
+requests==2.32.3
+
+# Utilities
+python-dotenv==1.0.1
+aiofiles==23.2.1
+httpx==0.27.0
+tenacity==8.3.0
+loguru==0.7.2
+
+# Text processing
+numpy==1.26.4
+```
+
+---
+
+**Then on Railway, do this:**
+
+1. Go to your Railway project → **Settings** tab
+2. Find **Build Command** — clear it (leave blank, let nixpacks handle it)
+3. Find **Start Command** — set it to:
+```
+uvicorn main:app --host 0.0.0.0 --port $PORT

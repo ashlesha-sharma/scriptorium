@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: scriptorium-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: apt-get install -y tesseract-ocr poppler-utils libgl1-mesa-glx && pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: HF_API_KEY
+        sync: false
+      - key: HF_MODEL
+        value: mistralai/Mistral-7B-Instruct-v0.3
+      - key: EMBEDDING_MODEL
+        value: sentence-transformers/all-MiniLM-L6-v2
+      - key: CHUNK_SIZE
+        value: "512"
+      - key: CHUNK_OVERLAP
+        value: "64"
+      - key: TOP_K_RETRIEVAL
+        value: "6"
+      - key: DEBUG
+        value: "false"
